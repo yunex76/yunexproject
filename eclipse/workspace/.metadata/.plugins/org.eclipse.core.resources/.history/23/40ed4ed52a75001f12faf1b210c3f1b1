@@ -1,0 +1,12 @@
+package actionform;
+
+import org.apache.struts.action.ActionForm;
+
+public class PersonForm extends ActionForm {
+
+	private String id;
+	private String password;
+	private String name;
+
+	
+}

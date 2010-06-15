@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<package name="pojoAction" namespace="/action_pojo" extends="struts-default">
+		<action name="pojoAction" class="action.pojo.PojoBasicAction">
+			<result name="success">/action_pojo/res.jsp</result>
+		</action>
+	</package>
+	
+	<package name="param_name" namespace="/action_param" extends="struts-default">
+		<action name="paramAction" class="action.param.ParameterAction">
+			<interceptor-ref name="params"></interceptor-ref>	<!-- 뭔지는 struts-default 에 정의 되어 있음 -->
+			<result name="success">/action_param/res.jsp</result>
+		</action>
+
+		<action name="paramVOAction" class="action.param.ParameterVOAction">
+			<interceptor-ref name="params"></interceptor-ref>	<!-- 뭔지는 struts-default 에 정의 되어 있음 -->
+			<result name="success">/action_param/res_vo.jsp</result>
+		</action>
+
+		<action name="paramModelAction" class="action.param.ParameterModelAction">
+			<interceptor-ref name="modelDriven"></interceptor-ref>
+			<interceptor-ref name="params"></interceptor-ref>	<!-- 뭔지는 struts-default 에 정의 되어 있음 -->
+			<result name="success">/action_param/res_vo.jsp</result>
+		</action>
+	</package>
+	
+	<package name="actionsupport" namespace="/actionsupport" extends="struts-default">
+		<action name="actionsupport_validate" class="actionsupport.validate.RegisterAction">
+			<interceptor-ref name="params"></interceptor-ref>
+			<interceptor-ref name="validation"></interceptor-ref> <!-- validate() 호출 -->
+			<interceptor-ref name="workflow"></interceptor-ref> <!-- hasError() 호출 : true면 "input"을 return한다. -->
+			<result name="success">/actionsupport_validate/res.jsp</result>
+			<result name="input">/actionsupport_validate/input.jsp</result>
+		</action>
+		<action name="actionsupport_message" class="actionsupport.message.MessageAction">
+			<interceptor-ref name="params"></interceptor-ref>
+			<result name="response">/actionsupport_message/response.jsp</result>
+		</action>
+	</package>
+
+	<package name="config" namespace="/config" extends="struts-default">
+		<action name="*" class="action.config.wildcard.CRUDAction" method="{1}">
+			<result>/action_config/res.jsp</result>		
+		</action>
+	</package>
+	
+	<package name="actionContext" namespace="/actionctx" extends="struts-default">
+		<action name="actioncontext" class="actioncontext.ActionContextTestAction">
+			<result>/actioncontext/actioncontext_res.jsp</result>
+		</action>
+	</package>
+	
+	<package name="interceptor_test" namespace="/interceptor" extends="struts-default">
+		<interceptors>	<!-- 인터셉터들을 설정하는 root 태그 -->
+			<interceptor name="basic_interceptor" class="interceptor.basic.BasicInterceptor"/>
+			<interceptor name="memberserviceDI" class="interceptor.di.MemberServiceDIInterceptor"/>
+		</interceptors>
+		<action name="basic_action" class="interceptor.basic.BasicAction">
+			<interceptor-ref name="basic_interceptor"></interceptor-ref>
+			<result name="response">/interceptor_basic/res.jsp</result>
+			<result name="login">/interceptor_basic/login.jsp</result>
+		</action>
+		<action name="register_action" class="interceptor.di.RegisterAction">
+			<interceptor-ref name="memberserviceDI"></interceptor-ref>
+			<interceptor-ref name="params"/>
+			<result>/interceptor_di/res.jsp</result>
+		</action>
+		<action name="servlet_config" class="interceptor.servletconfig.ServletConfigAction">
+			<interceptor-ref name="servletConfig"></interceptor-ref>
+			<result name="response">/interceptor_servletconfig/res.jsp</result>
+		</action>
+		<action name="file_upload" class="interceptor.fileupload.FileUploadAction">
+			<interceptor-ref name="fileUpload"></interceptor-ref>
+			<interceptor-ref name="params"></interceptor-ref>
+		</action>
+	</package>
+</struts>
