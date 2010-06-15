@@ -1,0 +1,10 @@
+package customer.model.dao;
+
+/**
+ * 고객관리 비지니스 로직중 Database관련 로직을 담당
+ * @author yunex
+ *
+ */
+public class CustomerDAO {
+
+}
