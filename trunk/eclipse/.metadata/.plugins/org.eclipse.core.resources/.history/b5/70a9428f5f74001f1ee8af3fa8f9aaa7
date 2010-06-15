@@ -1,0 +1,15 @@
+package customer.model.service;
+
+import customer.model.vo.CustomerVO;
+
+/**
+ * 고객 관리 비지니스 로직을 처리하는 클래스
+ * @author yunex
+ *
+ */
+public class CustomerService {
+
+	public void registerCustomer(CustomerVO cvo) {
+		
+	}
+}
