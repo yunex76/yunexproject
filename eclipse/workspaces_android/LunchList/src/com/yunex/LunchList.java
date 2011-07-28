@@ -1,16 +1,24 @@
 package com.yunex;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.SimpleAdapter;
 
 public class LunchList extends Activity {
 
-	Restaurant r = new Restaurant();
+	List<Restaurant> model = new ArrayList<Restaurant>();
+	ArrayAdapter<Restaurant> adapter = null;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,20 +28,43 @@ public class LunchList extends Activity {
         Button save = (Button)findViewById(R.id.save);
         
 		save.setOnClickListener(onSave);
+		
+		ListView list = (ListView)findViewById(R.id.restaurants);
+		
+		// android.R.layout.simple_list_item_1
+			// -> list에서 각 항목을 표시할 레이아웃. 한줄의 텍스트만 표시
+		adapter = new ArrayAdapter<Restaurant>(this,
+				android.R.layout.simple_list_item_1,
+				model);
+		list.setAdapter(adapter);
     }
 
 	private View.OnClickListener onSave = new OnClickListener() {
 		
 		@Override
 		public void onClick(View v) {
+			Restaurant r = new Restaurant();
 			EditText name = (EditText)findViewById(R.id.name);
 			EditText address = (EditText)findViewById(R.id.addr);
 			
 			r.setName(name.getText().toString());
 			r.setAddress(address.getText().toString());
-
-			// LogCat 상단의 V,D,I,W,E 조건에 따라 메소드가 결정됨
-			Log.d("DEBUG", r.toString());
+			
+			RadioGroup types = (RadioGroup)findViewById(R.id.types);
+			
+			switch (types.getCheckedRadioButtonId()) {
+			case R.id.sit_down:
+				r.setType("sit_down");
+				break;
+			case R.id.take_out:
+				r.setType("take_out");
+				break;
+			case R.id.delivery:
+				r.setType("delivery");
+				break;
+			}
+			
+			adapter.add(r);
 		}
 	};
 }
