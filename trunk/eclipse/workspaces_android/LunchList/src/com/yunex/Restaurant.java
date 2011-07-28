@@ -4,7 +4,14 @@ public class Restaurant {
 
 	private String name = "";
 	private String address = "";
+	private String type = "";
 	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	public String getName() {
 		return name;
 	}
@@ -19,6 +26,6 @@ public class Restaurant {
 	}
 	@Override
 	public String toString() {
-		return "Restaurant [name=" + name + ", address=" + address + "]";
+		return getName();
 	}
 }
