@@ -5,12 +5,14 @@ import java.util.List;
 
 import android.app.TabActivity;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -34,10 +36,13 @@ public class LunchList extends TabActivity {
 	EditText notes = null;
 	
 	Restaurant current = null;
+	
+	int progress = 0;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_PROGRESS);	//제목줄 전체를 바형태의 진행바가 생기게 설정
         setContentView(R.layout.main);
         
         name = (EditText)findViewById(R.id.name);
@@ -202,7 +207,43 @@ public class LunchList extends TabActivity {
 			
 			return true;
 		}
+		else if (item.getItemId() == R.id.run) {
+			setProgressBarVisibility(true);
+			progress = 0;
+			new Thread(longTask).start();
+		}
 		
 		return super.onOptionsItemSelected(item);
 	}
+	
+	private void doSomeLongWork(final int incr) {
+		runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				progress += incr;
+				setProgress(progress);
+			}
+		});
+		
+		SystemClock.sleep(250);	// should be something more useful!
+	}
+	
+	private Runnable longTask = new Runnable() {
+		
+		@Override
+		public void run() {
+			for ( int i = 0; i < 20; i++ ) {
+				doSomeLongWork(500);
+			}
+			
+			runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					setProgressBarVisibility(false);
+				}
+			});
+		}
+	};
 }
