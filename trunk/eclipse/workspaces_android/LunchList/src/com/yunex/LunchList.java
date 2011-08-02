@@ -6,14 +6,19 @@ import java.util.List;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 public class LunchList extends Activity {
 
@@ -33,9 +38,7 @@ public class LunchList extends Activity {
 		
 		// android.R.layout.simple_list_item_1
 			// -> list에서 각 항목을 표시할 레이아웃. 한줄의 텍스트만 표시
-		adapter = new ArrayAdapter<Restaurant>(this,
-				android.R.layout.simple_list_item_1,
-				model);
+		adapter = new RestaurantAdapter();
 		list.setAdapter(adapter);
     }
 
@@ -67,4 +70,60 @@ public class LunchList extends Activity {
 			adapter.add(r);
 		}
 	};
+	
+	class RestaurantAdapter extends ArrayAdapter<Restaurant> {
+		RestaurantAdapter() {
+			super(LunchList.this,
+					android.R.layout.simple_list_item_1,
+					model);
+		}
+		
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View row = convertView;
+			RestaurantHolder holder = null;
+			
+			if ( row == null ) {
+				LayoutInflater inflater = getLayoutInflater();
+				row = inflater.inflate(R.layout.row, null);
+				
+				holder = new RestaurantHolder(row);
+				row.setTag(holder);
+			}
+			else {
+				holder = (RestaurantHolder)row.getTag();
+			}
+			
+			holder.populateFrom(model.get(position));
+			
+			return row;
+		}
+	}
+	
+	static class RestaurantHolder {
+		private TextView name = null;
+		private TextView address = null;
+		private ImageView icon = null;
+		
+		RestaurantHolder(View row) {
+			name = (TextView)row.findViewById(R.id.title);
+			address = (TextView)row.findViewById(R.id.address);
+			icon = (ImageView)row.findViewById(R.id.icon);
+		}
+		
+		void populateFrom(Restaurant r) {
+			name.setText(r.getName());
+			address.setText(r.getAddress());
+			
+			if (r.getType().equals("sit_down")) {
+				icon.setImageResource(R.drawable.ball_red);
+			}
+			else if (r.getType().equals("take_out")) {
+				icon.setImageResource(R.drawable.ball_yellow);
+			}
+			else {
+				icon.setImageResource(R.drawable.ball_green);
+			}
+			
+		}
+	}
 }
