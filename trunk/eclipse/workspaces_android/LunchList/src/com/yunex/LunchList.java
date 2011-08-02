@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.TabActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,17 +20,25 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.SimpleAdapter;
+import android.widget.TabHost;
 import android.widget.TextView;
 
-public class LunchList extends Activity {
+public class LunchList extends TabActivity {
 
 	List<Restaurant> model = new ArrayList<Restaurant>();
 	ArrayAdapter<Restaurant> adapter = null;
+	EditText name = null;
+	EditText address = null;
+	RadioGroup types = null;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        name = (EditText)findViewById(R.id.name);
+        address = (EditText)findViewById(R.id.addr);
+        types = (RadioGroup)findViewById(R.id.types);
         
         Button save = (Button)findViewById(R.id.save);
         
@@ -40,6 +50,22 @@ public class LunchList extends Activity {
 			// -> list에서 각 항목을 표시할 레이아웃. 한줄의 텍스트만 표시
 		adapter = new RestaurantAdapter();
 		list.setAdapter(adapter);
+		
+		// 탭 추가 부분
+		TabHost.TabSpec spec = getTabHost().newTabSpec("tag1");
+		
+		spec.setContent(R.id.restaurants);
+		spec.setIndicator("List", getResources().getDrawable(R.drawable.list));
+		getTabHost().addTab(spec);
+		
+		spec = getTabHost().newTabSpec("tag2");
+		spec.setContent(R.id.details);
+		spec.setIndicator("Details", getResources().getDrawable(R.drawable.restaurant));
+		getTabHost().addTab(spec);
+		
+		getTabHost().setCurrentTab(0);
+		
+		list.setOnItemClickListener(onListClick);
     }
 
 	private View.OnClickListener onSave = new OnClickListener() {
@@ -47,13 +73,8 @@ public class LunchList extends Activity {
 		@Override
 		public void onClick(View v) {
 			Restaurant r = new Restaurant();
-			EditText name = (EditText)findViewById(R.id.name);
-			EditText address = (EditText)findViewById(R.id.addr);
-			
 			r.setName(name.getText().toString());
 			r.setAddress(address.getText().toString());
-			
-			RadioGroup types = (RadioGroup)findViewById(R.id.types);
 			
 			switch (types.getCheckedRadioButtonId()) {
 			case R.id.sit_down:
@@ -74,7 +95,7 @@ public class LunchList extends Activity {
 	class RestaurantAdapter extends ArrayAdapter<Restaurant> {
 		RestaurantAdapter() {
 			super(LunchList.this,
-					android.R.layout.simple_list_item_1,
+					R.layout.row,
 					model);
 		}
 		
@@ -84,7 +105,7 @@ public class LunchList extends Activity {
 			
 			if ( row == null ) {
 				LayoutInflater inflater = getLayoutInflater();
-				row = inflater.inflate(R.layout.row, null);
+				row = inflater.inflate(R.layout.row, parent, false);
 				
 				holder = new RestaurantHolder(row);
 				row.setTag(holder);
@@ -123,7 +144,32 @@ public class LunchList extends Activity {
 			else {
 				icon.setImageResource(R.drawable.ball_green);
 			}
-			
 		}
 	}
+	
+	/**
+	 * List Tab의 ListView 항목을 클릭했을때 Details Tab의 컨트롤값을 설정하고 표시함
+	 */
+	private AdapterView.OnItemClickListener onListClick = new AdapterView.OnItemClickListener() {
+		public void onItemClick(AdapterView<?> parent,
+				View view, int position,
+				long id) {
+			Restaurant r = model.get(position);
+			
+			name.setText(r.getName());
+			address.setText(r.getAddress());
+			
+			if (r.getType().equals("sit_down")) {
+				types.check(R.id.sit_down);
+			}
+			else if (r.getType().equals("take_out")) {
+				types.check(R.id.take_out);
+			}
+			else {
+				types.check(R.id.delivery);
+			}
+			
+			getTabHost().setCurrentTab(1);
+		}
+	}; 
 }
