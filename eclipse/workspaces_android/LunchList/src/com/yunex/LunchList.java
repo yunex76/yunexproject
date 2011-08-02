@@ -3,15 +3,16 @@ package com.yunex;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.app.TabActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.LayoutInflater;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,9 +20,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.SimpleAdapter;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LunchList extends TabActivity {
 
@@ -30,6 +31,9 @@ public class LunchList extends TabActivity {
 	EditText name = null;
 	EditText address = null;
 	RadioGroup types = null;
+	EditText notes = null;
+	
+	Restaurant current = null;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,7 @@ public class LunchList extends TabActivity {
         name = (EditText)findViewById(R.id.name);
         address = (EditText)findViewById(R.id.addr);
         types = (RadioGroup)findViewById(R.id.types);
+        notes = (EditText)findViewById(R.id.notes);
         
         Button save = (Button)findViewById(R.id.save);
         
@@ -72,23 +77,25 @@ public class LunchList extends TabActivity {
 		
 		@Override
 		public void onClick(View v) {
-			Restaurant r = new Restaurant();
-			r.setName(name.getText().toString());
-			r.setAddress(address.getText().toString());
+			current = new Restaurant();
+			current.setName(name.getText().toString());
+			current.setAddress(address.getText().toString());
 			
 			switch (types.getCheckedRadioButtonId()) {
 			case R.id.sit_down:
-				r.setType("sit_down");
+				current.setType("sit_down");
 				break;
 			case R.id.take_out:
-				r.setType("take_out");
+				current.setType("take_out");
 				break;
 			case R.id.delivery:
-				r.setType("delivery");
+				current.setType("delivery");
 				break;
 			}
 			
-			adapter.add(r);
+			current.setNotes(notes.getText().toString());
+			
+			adapter.add(current);
 		}
 	};
 	
@@ -154,22 +161,48 @@ public class LunchList extends TabActivity {
 		public void onItemClick(AdapterView<?> parent,
 				View view, int position,
 				long id) {
-			Restaurant r = model.get(position);
+			current = model.get(position);
 			
-			name.setText(r.getName());
-			address.setText(r.getAddress());
+			name.setText(current.getName());
+			address.setText(current.getAddress());
 			
-			if (r.getType().equals("sit_down")) {
+			if (current.getType().equals("sit_down")) {
 				types.check(R.id.sit_down);
 			}
-			else if (r.getType().equals("take_out")) {
+			else if (current.getType().equals("take_out")) {
 				types.check(R.id.take_out);
 			}
 			else {
 				types.check(R.id.delivery);
 			}
 			
+			notes.setText(current.getNotes());
+			
 			getTabHost().setCurrentTab(1);
 		}
 	}; 
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		new MenuInflater(this).inflate(R.menu.option, menu);
+		
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.toast) {
+			String message = "No restaurant selected";
+			
+			if (current != null) {
+				message = current.getNotes();
+			}
+			
+			Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+			
+			return true;
+		}
+		
+		return super.onOptionsItemSelected(item);
+	}
 }
