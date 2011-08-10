@@ -28,9 +28,6 @@
                                 android:text="Delivery"
                         />
                 </RadioGroup>
-                <TextView android:text="Notes:"
-                        android:paddingLeft="2dip"
-                />
                 <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
@@ -39,14 +36,20 @@
                         <EditText android:id="@+id/notes"
                                 android:singleLine="false"
                                 android:gravity="top"
-                                android:lines="3"
+                                android:lines="4"
                                 android:scrollHorizontally="false"
-                                android:maxLines="3"
+                                android:maxLines="4"
                                 android:maxWidth="140sp"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
+                                android:hint="Notes"
                         />
-                            <Button android:id="@+id/save"
+                        <EditText android:id="@+id/feed"
+                        		android:layout_width="fill_parent"
+                        		android:layout_height="wrap_content"
+                        		android:hint="Feed URL">
+                        </EditText>
+                        <Button android:id="@+id/save"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Save"
