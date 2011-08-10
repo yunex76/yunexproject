@@ -3,6 +3,9 @@ package com.yunex;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class DetailForm extends Activity {
@@ -23,9 +27,12 @@ public class DetailForm extends Activity {
 	EditText notes = null;
 	RadioGroup types = null;
 	EditText feed = null;
+	TextView location = null;
 	RestaurantHelper helper = null;
 	
 	String restaurantId = null;
+	
+	LocationManager locMgr = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,9 @@ public class DetailForm extends Activity {
         types = (RadioGroup)findViewById(R.id.types);
         notes = (EditText)findViewById(R.id.notes);
         feed = (EditText)findViewById(R.id.feed);
+        location = (TextView)findViewById(R.id.location);
+        
+        locMgr = (LocationManager)getSystemService(LOCATION_SERVICE);
         
         Button save = (Button)findViewById(R.id.save);
 		save.setOnClickListener(onSave);
@@ -68,6 +78,10 @@ public class DetailForm extends Activity {
 			types.check(R.id.delivery);
 		}
 		
+		location.setText(String.valueOf(helper.getLatitude(c))
+				+ ", "
+				+ String.valueOf(helper.getLongitude(c)));
+		
 		c.close();
 	}
 
@@ -76,6 +90,13 @@ public class DetailForm extends Activity {
 
 		super.onDestroy();
 		helper.close();
+	}
+	
+	@Override
+	protected void onPause() {
+		save();
+		locMgr.removeUpdates(onLocationChange);
+		super.onPause();
 	}
 	
 	@Override
@@ -118,9 +139,54 @@ public class DetailForm extends Activity {
 			
 			return true;
 		}
+		else if (item.getItemId() == R.id.location){
+			locMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, onLocationChange);
+			return true;
+		}
 
 		return super.onOptionsItemSelected(item);
 	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		
+		if (restaurantId == null) {
+			menu.findItem(R.id.location).setEnabled(false);
+		}
+		return super.onPrepareOptionsMenu(menu);
+	};
+	
+	LocationListener onLocationChange = new LocationListener() {
+		
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void onProviderEnabled(String provider) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void onProviderDisabled(String provider) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void onLocationChanged(Location fix) {
+			helper.updateLocation(restaurantId, fix.getLatitude(), fix.getLongitude());
+			location.setText(String.valueOf(fix.getLatitude())
+					+ ", "
+					+ String.valueOf(fix.getLongitude()));
+			locMgr.removeUpdates(onLocationChange);
+			
+			Toast.makeText(DetailForm.this, "Location saved", Toast.LENGTH_LONG).show();
+		}
+	};
 	
 	private boolean isNetworkAvailable() {
 		ConnectivityManager cm = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
@@ -132,32 +198,36 @@ public class DetailForm extends Activity {
 		
 		@Override
 		public void onClick(View v) {
-			String type = null;
-			
-			switch (types.getCheckedRadioButtonId()) {
-			case R.id.sit_down:
-				type = "sit_down";
-				break;
-			case R.id.take_out:
-				type = "take_out";
-				break;
-			case R.id.delivery:
-				type = "delivery";
-				break;
-			}
-			
-			if (restaurantId == null) {
-				helper.insert(name.getText().toString(), address.getText().toString(),
-						type, notes.getText().toString(), feed.getText().toString());
-			}
-			else {
-				helper.update(restaurantId, name.getText().toString(),
-						address.getText().toString(),
-						type, notes.getText().toString(), feed.getText().toString());
-			}
-			
-			finish();
+			save();
 		}
 	};
+
+	private void save() {
+		String type = null;
+		
+		switch (types.getCheckedRadioButtonId()) {
+		case R.id.sit_down:
+			type = "sit_down";
+			break;
+		case R.id.take_out:
+			type = "take_out";
+			break;
+		case R.id.delivery:
+			type = "delivery";
+			break;
+		}
+		
+		if (restaurantId == null) {
+			helper.insert(name.getText().toString(), address.getText().toString(),
+					type, notes.getText().toString(), feed.getText().toString());
+		}
+		else {
+			helper.update(restaurantId, name.getText().toString(),
+					address.getText().toString(),
+					type, notes.getText().toString(), feed.getText().toString());
+		}
+		
+		finish();
+	}
 	
 }
