@@ -32,6 +32,9 @@
 
         <activity android:name=".FeedActivity">
         </activity>
+        
+        <service android:name=".FeedService">
+        </service>
 
     </application>
 </manifest>
