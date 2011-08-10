@@ -68,6 +68,26 @@ public class DetailForm extends Activity {
 		helper.close();
 	}
 	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		
+		outState.putString("name", name.getText().toString());
+		outState.putString("address", address.getText().toString());
+		outState.putString("notes", notes.getText().toString());
+		outState.putInt("type", types.getCheckedRadioButtonId());
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		
+		name.setText(savedInstanceState.getString("name"));
+		address.setText(savedInstanceState.getString("address"));
+		notes.setText(savedInstanceState.getString("notes"));
+		types.check(savedInstanceState.getInt("type"));
+	}
+	
 	private View.OnClickListener onSave = new OnClickListener() {
 		
 		@Override
