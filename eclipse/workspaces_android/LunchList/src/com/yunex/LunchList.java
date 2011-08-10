@@ -3,8 +3,10 @@ package com.yunex;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,18 +26,45 @@ public class LunchList extends ListActivity {
 	RestaurantAdapter adapter = null;
 	RestaurantHelper helper = null;
 	
+	SharedPreferences prefs = null;
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        
         helper = new RestaurantHelper(this);
-		model = helper.getAll();
+        initList();
+		
+		prefs.registerOnSharedPreferenceChangeListener(prefListener);
+    }
+	
+	private void initList() {
+		if (model != null) {
+			stopManagingCursor(model);
+			model.close();
+		}
+		
+		model = helper.getAll(prefs.getString("sort_order", "name"));
 		startManagingCursor(model);
 		adapter = new RestaurantAdapter(model);
 
 		setListAdapter(adapter);
-    }
+	}
+	
+	private SharedPreferences.OnSharedPreferenceChangeListener prefListener =
+		new SharedPreferences.OnSharedPreferenceChangeListener() {
+		
+		@Override
+		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+				String key) {
+			if (key.equals("sort_order")) {
+				initList();
+			}
+		}
+	};
 	
 	@Override
 	public void onDestroy() {
@@ -62,6 +91,10 @@ public class LunchList extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.add) {
 			startActivity(new Intent(LunchList.this, DetailForm.class));
+			return true;
+		}
+		else if (item.getItemId() == R.id.prefs) {
+			startActivity(new Intent(this, EditPreferences.class));
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

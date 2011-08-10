@@ -46,10 +46,10 @@ public class RestaurantHelper extends SQLiteOpenHelper {
 		
 	}
 	
-	public Cursor getAll() {
+	public Cursor getAll(String orderBy) {
 		String sql = "";
 		
-		sql += "SELECT _id, name, address, type, notes FROM restaurants ORDER BY name";
+		sql += "SELECT _id, name, address, type, notes FROM restaurants ORDER BY " + orderBy;
 		
 		return getReadableDatabase().rawQuery(sql, null);
 	}
