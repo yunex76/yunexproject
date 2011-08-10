@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	android:id에 선언하는 @+id, @id, @android:id의 의미
+		- @+id : 새로 추가하는 리소스
+		- @id : 이미 추가되어 있는 리소스 아이디를 참조
+		- @android:id : 안드로이드에 예약되어 있는 리소스 아이디
+ -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent" 
+  android:layout_height="match_parent">
+  <ListView
+    android:id="@android:id/list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+  />
+  <TextView
+    android:id="@android:id/empty"
+    android:layout_width="match_parent" 
+    android:layout_height="match_parent"
+    android:text="Click the MENU button to add a restaurant!"/>
+</FrameLayout>
