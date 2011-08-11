@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,6 +34,9 @@ public class DetailForm extends Activity {
 	String restaurantId = null;
 	
 	LocationManager locMgr = null;
+	
+	double latitude = 0.0d;
+	double longitude = 0.0d;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +82,12 @@ public class DetailForm extends Activity {
 			types.check(R.id.delivery);
 		}
 		
-		location.setText(String.valueOf(helper.getLatitude(c))
+		latitude = helper.getLatitude(c);
+		longitude = helper.getLongitude(c);
+		
+		location.setText(String.valueOf(latitude)
 				+ ", "
-				+ String.valueOf(helper.getLongitude(c)));
+				+ String.valueOf(longitude));
 		
 		c.close();
 	}
@@ -143,6 +150,24 @@ public class DetailForm extends Activity {
 			locMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, onLocationChange);
 			return true;
 		}
+		else if (item.getItemId() == R.id.map) {
+
+			Intent i2 = null;
+			try {
+				i2 = new Intent(this, RestaurantMap.class);
+			}
+			catch (Exception e) {
+				System.out.println(e.getMessage());
+				return false;
+			}
+			
+			i2.putExtra(RestaurantMap.EXTRA_LATITUDE, latitude);
+			i2.putExtra(RestaurantMap.EXTRA_LONGITUDE, longitude);
+			i2.putExtra(RestaurantMap.EXTRA_NAME, name.getText().toString());
+			
+			startActivity(i2);
+			return true;
+		}
 
 		return super.onOptionsItemSelected(item);
 	}
@@ -152,6 +177,7 @@ public class DetailForm extends Activity {
 		
 		if (restaurantId == null) {
 			menu.findItem(R.id.location).setEnabled(false);
+			menu.findItem(R.id.map).setEnabled(false);
 		}
 		return super.onPrepareOptionsMenu(menu);
 	};
