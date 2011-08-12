@@ -54,9 +54,6 @@ public class DetailForm extends Activity {
         
         locMgr = (LocationManager)getSystemService(LOCATION_SERVICE);
         
-        Button save = (Button)findViewById(R.id.save);
-		save.setOnClickListener(onSave);
-		
 		restaurantId = getIntent().getStringExtra(LunchList.ID_EXTRA);
 		if (restaurantId != null) {
 			load();
@@ -94,15 +91,14 @@ public class DetailForm extends Activity {
 
 	@Override
 	protected void onDestroy() {
-
-		super.onDestroy();
 		helper.close();
+		locMgr.removeUpdates(onLocationChange);
+		super.onDestroy();
 	}
 	
 	@Override
 	protected void onPause() {
 		save();
-		locMgr.removeUpdates(onLocationChange);
 		super.onPause();
 	}
 	
@@ -219,14 +215,6 @@ public class DetailForm extends Activity {
 		NetworkInfo info = cm.getActiveNetworkInfo();
 		return (info!=null);
 	}
-
-	private View.OnClickListener onSave = new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			save();
-		}
-	};
 
 	private void save() {
 		String type = null;
