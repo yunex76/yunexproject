@@ -4,6 +4,5 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="lib" path="libs/android-rss.jar"/>
-	<classpathentry kind="lib" path="C:/android-sdk_r11-windows/add-ons/addon_google_apis_google_inc_10/libs/maps.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
