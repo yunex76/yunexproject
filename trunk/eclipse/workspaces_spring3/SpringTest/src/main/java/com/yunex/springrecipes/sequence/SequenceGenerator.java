@@ -1,15 +1,23 @@
 package com.yunex.springrecipes.sequence;
 
-import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
+/**
+ * Map 객체를 사용한 예
+ * @author User
+ *
+ */
 public class SequenceGenerator {
 
 	private String prefix;
 	private String suffix;
 	private int initial;
 	private int counter;
-	private List<Object> suffixes;
 	
+	private Map<Object, Object> suffixes;
+	private Properties suffixes2;
+
 	public SequenceGenerator() {
 	}
 	
@@ -31,8 +39,12 @@ public class SequenceGenerator {
 		this.initial = initial;
 	}
 	
-	public void setSuffixes(List<Object> suffixes) {
+	public void setSuffixes(Map<Object, Object> suffixes) {
 		this.suffixes = suffixes;
+	}
+	
+	public void setSuffixes2(Properties suffixes2) {
+		this.suffixes2 = suffixes2;
 	}
 	
 	public synchronized String getSequence() {
@@ -41,9 +53,31 @@ public class SequenceGenerator {
 		buffer.append(initial + counter++);
 		buffer.append(suffix);
 		
-		for (Object suffix : suffixes) {
+		for (Map.Entry entry : suffixes.entrySet()) {
 			buffer.append("-");
-			buffer.append(suffix);
+			buffer.append(entry.getKey());
+			buffer.append("@");
+			buffer.append(entry.getValue());
+		}
+		
+		return buffer.toString();
+	}
+	
+	/**
+	 * Properties 타입도 Map과 동일하게 얻는다.
+	 * @return
+	 */
+	public synchronized String getSequence2() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(prefix);
+		buffer.append(initial + counter++);
+		buffer.append(suffix);
+		
+		for (Map.Entry entry : suffixes.entrySet()) {
+			buffer.append("-");
+			buffer.append(entry.getKey());
+			buffer.append("@");
+			buffer.append(entry.getValue());
 		}
 		
 		return buffer.toString();

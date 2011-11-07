@@ -15,8 +15,13 @@ public class Main {
 		
 		SequenceGenerator generator = (SequenceGenerator)context.getBean("sequenceGenerator");
 		
-		System.out.println(generator.getSequence());
-		System.out.println(generator.getSequence());
+		// Map
+		System.out.println("Map : " + generator.getSequence());
+		System.out.println("Map : " + generator.getSequence());
+
+		// Properties
+		System.out.println("Properties : " + generator.getSequence2());
+		System.out.println("Properties : " + generator.getSequence2());
 
 		System.out.println("End...");
 	}

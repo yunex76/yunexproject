@@ -17,28 +17,32 @@
 		</property>
 		
 		<property name="suffixes">
-			<list>
-				<value>A</value>
-				<bean class="java.net.URL">
-					<constructor-arg value="http" />
-					<constructor-arg value="www.apress.com" />
-					<constructor-arg value="/" />
-				</bean>
-				<null />
-			</list>
+			<map>
+				<entry>
+					<key>
+						<value>type</value>
+					</key>
+					<value>A</value>
+				</entry>
+				<entry>
+					<key>
+						<value>url</value>
+					</key>
+					<bean class="java.net.URL">
+						<constructor-arg value="http" />
+						<constructor-arg value="www.apress.com" />
+						<constructor-arg value="/" />
+					</bean>
+				</entry>
+			</map>
+		</property>
+
+		<property name="suffixes2">
+			<props>
+				<prop key="type">A</prop>
+				<prop key="url">http://www.apress.com/</prop>
+				<prop key="null"></prop>
+			</props>
 		</property>
 	</bean>
-
-	<!-- 파라미터처럼 사용하는 경우. 생성자의 파라미터 순으로 입력됨 -->
-	<!--
-	<bean name="sequenceGenerator" class="com.yunex.springrecipes.sequence.SequenceGenerator">
-		<constructor-arg value="30" />
-		<constructor-arg>
-			<value>A</value>
-		</constructor-arg>
-		<constructor-arg>
-			<value>100000</value>
-		</constructor-arg>
-	</bean>
-	-->
 </beans>
