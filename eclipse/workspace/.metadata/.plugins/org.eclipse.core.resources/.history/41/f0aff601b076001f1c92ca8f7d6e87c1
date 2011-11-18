@@ -1,9 +1,0 @@
-package action.param;
-
-public class ParameterAction {
-
-	private String message;
-	private String name;
-
-	
-}
