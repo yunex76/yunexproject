@@ -1,4 +1,4 @@
-package com.yunex.auction.service.objtest;
+package com.yunex.auction.service.obj.test;
 
 import static org.junit.Assert.*;
 

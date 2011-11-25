@@ -1,4 +1,4 @@
-package com.yunex.auction.servicetest;
+package com.yunex.auction.service.test;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -48,7 +48,7 @@ public class JoiningAndClosingWithoutBiddingTest {
 
 	private void fakingAuctionService(Auction sellingAuction) {
 		expect(fakeAuctionService.registerSellingAuction(sellingAuction)).andReturn(1L);
-		expect(fakeAuctionService.findSellingItemById(1L)).andReturn(sellingAuction);
+		expect(fakeAuctionService.findSellingAuctionById(1L)).andReturn(sellingAuction);
 		
 		expect(fakeAuctionService.findAuctionStatusById(1L)).andReturn(AuctionStatus.OPEN);
 		fakeAuctionService.startBidding(1L);
@@ -78,7 +78,7 @@ public class JoiningAndClosingWithoutBiddingTest {
 	 * 경매 물품 조회 점검
 	 */
 	private void assertRegisteredSellingItem(long auctionId) {
-		Auction sellingAuction = fakeAuctionService.findSellingItemById(auctionId);
+		Auction sellingAuction = fakeAuctionService.findSellingAuctionById(auctionId);
 		assertNotNull(sellingAuction);	// <- 오류 없애려면 " import static org.junit.Assert.*; " 추가
 	}
 }
