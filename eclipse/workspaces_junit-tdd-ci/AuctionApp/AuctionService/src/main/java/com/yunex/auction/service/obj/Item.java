@@ -28,4 +28,8 @@ public class Item {
 		return DateConverter.convertIntoString(this.purchasingDate, DATE_PATTERN);
 	}
 
+	public String getName() {
+		return name;
+	}
+
 }

@@ -13,6 +13,9 @@ public class DateConverter {
 	 * @return
 	 */
 	public static String convertIntoString(Date convertedDate, String pattern) {
+		if ( convertedDate == null ) {
+			return null;
+		}
 		SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 		return sdf.format(convertedDate);
 	}
@@ -24,6 +27,11 @@ public class DateConverter {
 	 * @return
 	 */
 	public static Date convertIntoDate(String dateStr, String pattern) {
+		
+		if ( dateStr == null ) {
+			return null;
+		}
+		
 		SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 		try {
 			return sdf.parse(dateStr);

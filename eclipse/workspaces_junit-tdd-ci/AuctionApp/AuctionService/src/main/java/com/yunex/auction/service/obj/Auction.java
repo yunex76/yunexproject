@@ -80,6 +80,11 @@ public class Auction {
 	public Object getClosingTime() {
 		return DateConverter.convertIntoString(this.closingDate, TIME_PATTERN);
 	}
+
+	public Item getAuctionItem() {
+		// TODO Auto-generated method stub
+		return auctionItem;
+	}
 	
 
 }

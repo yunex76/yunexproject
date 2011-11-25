@@ -1,5 +1,7 @@
 package com.yunex.auction.service;
 
+import java.util.List;
+
 import com.yunex.auction.service.obj.Auction;
 import com.yunex.auction.service.obj.AuctionStatus;
 
@@ -28,7 +30,7 @@ public interface AuctionService {
 	 * @param id 경매ID
 	 * @return 경매
 	 */
-	Auction findSellingItemById(long id);
+	Auction findSellingAuctionById(long id);
 
 	/**
 	 * 경매 상태값 조회
@@ -36,5 +38,11 @@ public interface AuctionService {
 	 * @return 경매 상태값
 	 */
 	AuctionStatus findAuctionStatusById(long id);
+	
+	/**
+	 * 현재 진행 중인 경매 목록 조회
+	 * @return
+	 */
+	List<Auction> findOngoingAuction();
 
 }
