@@ -47,23 +47,31 @@ public class AuctionServiceImpl implements AuctionService {
 	}
 
 	public void startBidding(long id) {
-		// TODO Auto-generated method stub
-
+		changeAuctionStatus(id, AuctionStatus.OPEN);
 	}
 
 	public void announceClosed(long id) {
-		// TODO Auto-generated method stub
+		changeAuctionStatus(id, AuctionStatus.CLOSE_LOST);
+	}
 
+	/**
+	 * 경매 상태 변경
+	 * @param id	경매ID
+	 * @param status	변경하고자 하는 경매 상태
+	 */
+	private void changeAuctionStatus(long id, AuctionStatus status) {
+		Auction auction = this.auctionDao.findAuctionById(id);
+		if (auction == null) throw new RuntimeException(id + "에 해당하는 경매정보가 없습니다.");
+		auction.setStatus(status);
+		this.auctionDao.updateAuction(auction);
 	}
 
 	public Auction findSellingAuctionById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.auctionDao.findAuctionById(id);
 	}
 
 	public AuctionStatus findAuctionStatusById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.auctionDao.findAuctionStatusById(id);
 	}
 
 	public List<Auction> findOngoingAuction() {

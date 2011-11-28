@@ -85,6 +85,11 @@ public class Auction {
 		// TODO Auto-generated method stub
 		return auctionItem;
 	}
+
+	public void setStatus(AuctionStatus open) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }
