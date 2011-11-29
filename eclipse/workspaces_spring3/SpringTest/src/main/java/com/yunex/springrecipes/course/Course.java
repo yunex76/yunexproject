@@ -2,12 +2,32 @@ package com.yunex.springrecipes.course;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "COURSE")
 public class Course {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private Long id;
+	
+	@Column(name = "TITLE", length = 100, nullable = false)
 	private String title;
+	
+	@Column(name = "BEGIN_DATE")
 	private Date beginDate;
+	
+	@Column(name = "END_DATE")
 	private Date endDate;
+	
+	@Column(name = "FEE")
 	private int fee;
 	
 	public Course() {

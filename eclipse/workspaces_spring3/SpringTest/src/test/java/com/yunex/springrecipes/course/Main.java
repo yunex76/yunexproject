@@ -10,7 +10,8 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 
-		CourseDao courseDao = new HibernateCourseDao();
+		// CourseDao courseDao = new HibernateCourseDao();
+		CourseDao courseDao = new JpaCourseDao();
 		
 		Course course = new Course();
 		course.setTitle("Core Spring");

@@ -6,6 +6,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
 
 public class HibernateCourseDao implements CourseDao {
@@ -13,7 +14,12 @@ public class HibernateCourseDao implements CourseDao {
 	private SessionFactory sessionFactory;
 	
 	public HibernateCourseDao() {
-		Configuration configuration = new Configuration().configure();
+		// 하이버네이트 XML 매핑
+		// Configuration configuration = new Configuration().configure();
+		
+		// JPA 애노테이션
+		Configuration configuration = new AnnotationConfiguration().configure();
+		
 		sessionFactory = configuration.buildSessionFactory();
 	}
 	
