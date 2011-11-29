@@ -25,6 +25,14 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">create</property>
 		
+		<!-- 하이버네이트 XML 매핑  -->
+		<!--
 		<mapping resource="./Course.hbm.xml" />
+		-->
+		
+		<!-- JPA 애노테이션 -->
+		<!--
+		<mapping class="com.yunex.springrecipes.course.Course" />
+		-->
 	</session-factory>
 </hibernate-configuration>
