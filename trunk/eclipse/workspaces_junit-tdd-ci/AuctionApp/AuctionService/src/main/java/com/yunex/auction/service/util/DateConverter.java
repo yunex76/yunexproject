@@ -5,6 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateConverter {
+	
+	public final static String DAY_PATTERN = "yyyy-MM-dd";
+	public final static String TIME_PATTERN = "HH:mm";
+	public final static String DAY_TIME_PATTERN = DAY_PATTERN + "+" + TIME_PATTERN;
 
 	/**
 	 * 날짜를 문자열로 변환

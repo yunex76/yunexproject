@@ -17,9 +17,9 @@ public class Auction {
 	
 	private Item auctionItem;
 	
-	private final static String DAY_PATTERN = "yyyy-MM-dd";
-	private final static String TIME_PATTERN = "HH:mm";		// "HH:mm:ss";
-	private final static String DAY_TIME_PATTERN = DAY_PATTERN + " " + TIME_PATTERN;
+	public Auction() {
+		
+	}
 
 	public Auction(Item item) {
 		this.auctionItem = item;
@@ -58,27 +58,27 @@ public class Auction {
 	}
 
 	public void setOpenDate(String openDay, String openTime) {
-		this.openDate = DateConverter.convertIntoDate(openDay + " " + openTime, DAY_TIME_PATTERN);
+		this.openDate = DateConverter.convertIntoDate(openDay + "+" + openTime, DateConverter.DAY_TIME_PATTERN);
 	}
 
 	public void setClosingDate(String closingDay, String closingTime) {
-		this.closingDate = DateConverter.convertIntoDate(closingDay + " " + closingTime, DAY_TIME_PATTERN);
+		this.closingDate = DateConverter.convertIntoDate(closingDay + "+" + closingTime, DateConverter.DAY_TIME_PATTERN);
 	}
 
 	public String getOpenDay() {
-		return DateConverter.convertIntoString(this.openDate, DAY_PATTERN);
+		return DateConverter.convertIntoString(this.openDate, DateConverter.DAY_PATTERN);
 	}
 
 	public String getOpenTime() {
-		return DateConverter.convertIntoString(this.openDate, TIME_PATTERN);
+		return DateConverter.convertIntoString(this.openDate, DateConverter.TIME_PATTERN);
 	}
 
 	public Object getClosingDay() {
-		return DateConverter.convertIntoString(this.closingDate, DAY_PATTERN);
+		return DateConverter.convertIntoString(this.closingDate, DateConverter.DAY_PATTERN);
 	}
 
 	public Object getClosingTime() {
-		return DateConverter.convertIntoString(this.closingDate, TIME_PATTERN);
+		return DateConverter.convertIntoString(this.closingDate, DateConverter.TIME_PATTERN);
 	}
 
 	public Item getAuctionItem() {
@@ -90,6 +90,12 @@ public class Auction {
 		// TODO Auto-generated method stub
 		
 	}
-	
 
+	public long getId() {
+		return this.id;
+	}
+	
+	public void setId(long id) {
+		this.id = id;
+	}
 }
