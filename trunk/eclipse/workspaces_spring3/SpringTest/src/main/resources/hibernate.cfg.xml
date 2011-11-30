@@ -26,9 +26,7 @@
         <property name="hbm2ddl.auto">create</property>
 		
 		<!-- 하이버네이트 XML 매핑  -->
-		<!--
-		<mapping resource="./Course.hbm.xml" />
-		-->
+		<mapping resource="com/yunex/springrecipes/course/Course.hbm.xml" />
 		
 		<!-- JPA 애노테이션 -->
 		<!--

@@ -3,6 +3,9 @@ package com.yunex.springrecipes.course;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 public class Main {
 
 	/**
@@ -11,7 +14,10 @@ public class Main {
 	public static void main(String[] args) {
 
 		// CourseDao courseDao = new HibernateCourseDao();
-		CourseDao courseDao = new JpaCourseDao();
+		// CourseDao courseDao = new JpaCourseDao();
+		
+		ApplicationContext context = new ClassPathXmlApplicationContext("beans-hibernate.xml");
+		CourseDao courseDao = (CourseDao)context.getBean("courseDao");
 		
 		Course course = new Course();
 		course.setTitle("Core Spring");
