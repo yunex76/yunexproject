@@ -2,86 +2,43 @@ package com.yunex.springrecipes.course.jpa;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
+import org.springframework.orm.jpa.JpaTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.yunex.springrecipes.course.Course;
 import com.yunex.springrecipes.course.CourseDao;
 
 public class JpaCourseDao implements CourseDao {
 
-	private EntityManagerFactory entityManagerFactory;
+	private JpaTemplate jpaTemplate;
 	
-	public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
-		this.entityManagerFactory = entityManagerFactory;
+	public void setJpaTemplate(JpaTemplate jpaTemplate) {
+		this.jpaTemplate = jpaTemplate;
 	}
 	
 	public JpaCourseDao() {
-		entityManagerFactory = Persistence.createEntityManagerFactory("course");
+
 	}
 	
-	@Override
+	@Transactional
 	public void store(Course course) {
-		EntityManager manager = entityManagerFactory.createEntityManager();
-		EntityTransaction tx = manager.getTransaction();
-		
-		try {
-			tx.begin();
-			manager.merge(course);
-			tx.commit();
-		}
-		catch (RuntimeException e) {
-			tx.rollback();
-			throw e;
-		}
-		finally {
-			manager.close();
-		}
+		jpaTemplate.merge(course);
 	}
 
-	@Override
+	@Transactional
 	public void delete(Long courseId) {
-		EntityManager manager = entityManagerFactory.createEntityManager();
-		EntityTransaction tx = manager.getTransaction();
-		
-		try {
-			tx.begin();
-			Course course = manager.find(Course.class, courseId);
-			tx.commit();
-		}
-		catch (RuntimeException e) {
-			tx.rollback();
-			throw e;
-		}
-		finally {
-			manager.close();
-		}
+		Course course = jpaTemplate.find(Course.class, courseId);
+		jpaTemplate.remove(course);
 	}
 
-	@Override
+	@Transactional(readOnly = true)
 	public Course findById(Long courseId) {
-		EntityManager manager = entityManagerFactory.createEntityManager();
-		try {
-			return manager.find(Course.class, courseId);
-		}
-		finally {
-			manager.close();
-		}
+		return jpaTemplate.find(Course.class, courseId);
 	}
 
-	@Override
+	@Transactional(readOnly = true)
 	public List<Course> findAll() {
-		EntityManager manager = entityManagerFactory.createEntityManager();
-		try {
-			Query query = manager.createQuery("select course from Course course");
-			return query.getResultList();
-		}
-		finally {
-			manager.close();
-		}
+		return jpaTemplate.find("from Course");
 	}
 
 }
