@@ -13,6 +13,10 @@ public class HibernateCourseDao implements CourseDao {
 
 	private SessionFactory sessionFactory;
 	
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+	
 	public HibernateCourseDao() {
 		// 하이버네이트 XML 매핑
 		// Configuration configuration = new Configuration().configure();
