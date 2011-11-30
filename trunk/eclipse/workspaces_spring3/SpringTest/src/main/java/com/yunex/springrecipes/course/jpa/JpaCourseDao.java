@@ -1,4 +1,4 @@
-package com.yunex.springrecipes.course;
+package com.yunex.springrecipes.course.jpa;
 
 import java.util.List;
 
@@ -8,9 +8,16 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import com.yunex.springrecipes.course.Course;
+import com.yunex.springrecipes.course.CourseDao;
+
 public class JpaCourseDao implements CourseDao {
 
 	private EntityManagerFactory entityManagerFactory;
+	
+	public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+		this.entityManagerFactory = entityManagerFactory;
+	}
 	
 	public JpaCourseDao() {
 		entityManagerFactory = Persistence.createEntityManagerFactory("course");
