@@ -1,4 +1,4 @@
-package com.yunex.springrecipes.course;
+package com.yunex.springrecipes.course.hibernate;
 
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -6,9 +6,13 @@ import java.util.List;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.yunex.springrecipes.course.Course;
+import com.yunex.springrecipes.course.CourseDao;
+
 public class Main {
 
 	/**
+	 * 돌릴때 hibernate.cfg.xml의 [하이버네이트 XML 매핑]부분을 주석해제
 	 * @param args
 	 */
 	public static void main(String[] args) {
