@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.kyoborealco.hrm.entity.LoanHouseDepositRate;
 import com.kyoborealco.util.DateTimeConverter;
+import com.kyoborealco.util.test.ClassInnerAttributeCheck;
 
 /**
  * 전세자금대출이율 entity 테스트 Class
@@ -37,44 +38,22 @@ public class LoanHouseDepositRateTest {
 		assertInnerAttributes(loanHouseDepositRate);	// 내부속성값 점검
 	}
 
-	private void assertInnerAttributes(LoanHouseDepositRate loanHouseDepositRate) throws
-		SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-		
-		ClassInnerAttributeCheck(loanHouseDepositRate, "id", (Long)1L);
-		ClassInnerAttributeCheck(loanHouseDepositRate, "startUseDate", (String)"20111201");
-		ClassInnerAttributeCheck(loanHouseDepositRate, "endUseDate", (String)"20131130");
-		ClassInnerAttributeCheck(loanHouseDepositRate, "companyRate", (Double)2.0d);
-		ClassInnerAttributeCheck(loanHouseDepositRate, "irsRate", (Double)8.5d);
-		ClassInnerAttributeCheck(loanHouseDepositRate, "createUserId", (String)"DBA");
-		ClassInnerAttributeCheck(loanHouseDepositRate, "createDateTime", (Date)DateTimeConverter.stringToDatetime("2011-12-01 15:55:00"));
-		ClassInnerAttributeCheck(loanHouseDepositRate, "updateUserId", (String)"DBA2");
-		ClassInnerAttributeCheck(loanHouseDepositRate, "updateDateTime", (Date)DateTimeConverter.stringToDatetime("2011-12-01 17:55:00"));
-	}
-
 	/**
-	 * Class 내부의 속성 및 값체크
-	 * @param object Class instance
-	 * @param fieldName Class instance가 가진것으로 추정되는 멤버변수명
-	 * @param checkValue Class instance가 가진 멤버변수가 담고 있다고 추정되는 값
-	 * @throws SecurityException
-	 * @throws NoSuchFieldException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
+	 * 내부속성값 점검
+	 * @param loanHouseDepositRate
+	 * @throws Exception
 	 */
-	private void ClassInnerAttributeCheck(Object object,
-			String fieldName, Object checkValue)
-			throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+	private void assertInnerAttributes(LoanHouseDepositRate loanHouseDepositRate) throws Exception {
 		
-		Field field = object.getClass().getDeclaredField(fieldName);
-		if ( field == null ) {
-			fail(object.getClass().getName() + " Class에 '" + fieldName + "' 속성이 없습니다.");
-		}
-		field.setAccessible(true);
-		Object value = field.get(object);
-		
-		assertNotNull(value);
-		assertEquals(checkValue.getClass(), value.getClass());
-
-		assertEquals(checkValue, value);
+		assertTrue(ClassInnerAttributeCheck.check(loanHouseDepositRate, "id", (Long)1L));
+		assertTrue(ClassInnerAttributeCheck.check(loanHouseDepositRate, "startUseDate", (String)"20111201"));
+		assertTrue(ClassInnerAttributeCheck.check(loanHouseDepositRate, "endUseDate", (String)"20131130"));
+		assertTrue(ClassInnerAttributeCheck.check(loanHouseDepositRate, "companyRate", (Double)2.0d));
+		assertTrue(ClassInnerAttributeCheck.check(loanHouseDepositRate, "irsRate", (Double)8.5d));
+		assertTrue(ClassInnerAttributeCheck.check(loanHouseDepositRate, "createUserId", (String)"DBA"));
+		assertTrue(ClassInnerAttributeCheck.check(loanHouseDepositRate, "createDateTime", (Date)DateTimeConverter.stringToDatetime("2011-12-01 15:55:00")));
+		assertTrue(ClassInnerAttributeCheck.check(loanHouseDepositRate, "updateUserId", (String)"DBA2"));
+		assertTrue(ClassInnerAttributeCheck.check(loanHouseDepositRate, "updateDateTime", (Date)DateTimeConverter.stringToDatetime("2011-12-01 17:55:00")));
 	}
+
 }
