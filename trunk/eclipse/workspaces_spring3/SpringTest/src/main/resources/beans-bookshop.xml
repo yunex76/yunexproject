@@ -13,7 +13,19 @@
 	</bean>
 	
 	<bean id="bookShop"
+		class="com.yunex.springrecipes.bookshop.spring.impl.TransactionalJdbcBookShop">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="transactionManager" ref="transactionManager"></property>
+	</bean>
+	
+	<!--
+	<bean id="bookShop"
 		class="com.yunex.springrecipes.bookshop.spring.impl.JdbcBookShop">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	-->
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 </beans>
