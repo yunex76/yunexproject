@@ -9,6 +9,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.yunex.springrecipes.bookshop.spring.BookShop;
 
@@ -22,27 +24,25 @@ public class TransactionalJdbcBookShop extends JdbcDaoSupport implements
 	}
 
 	@Override
-	public void purchase(String isbn, String username) {
-		TransactionDefinition def = new DefaultTransactionDefinition();
-		TransactionStatus status = transactionManager.getTransaction(def);
+	public void purchase(final String isbn, final String username) {
 		
-		try {
-			int price = getJdbcTemplate().queryForInt("SELECT PRICE FROM BOOK WHERE ISBN = ?", new Object[] { isbn });
-			
-			getJdbcTemplate().update(
-					"UPDATE BOOK_STOCK SET STOCK = STOCK - 1 " +
-					"WHERE ISBN = ?", new Object[] { isbn });
-			
-			getJdbcTemplate().update(
-					"UPDATE ACCOUNT SET BALANCE = BALANCE - ? " +
-					"WHERE USERNAME = ?", new Object[] { price, username });
+		TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
 
-			transactionManager.commit(status);
-		}
-		catch (DataAccessException e) {
-			transactionManager.rollback(status);
-			throw e;
-		}
+		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+			
+			@Override
+			protected void doInTransactionWithoutResult(TransactionStatus status) {
+				int price = getJdbcTemplate().queryForInt("SELECT PRICE FROM BOOK WHERE ISBN = ?", new Object[] { isbn });
+				
+				getJdbcTemplate().update(
+						"UPDATE BOOK_STOCK SET STOCK = STOCK - 1 " +
+						"WHERE ISBN = ?", new Object[] { isbn });
+				
+				getJdbcTemplate().update(
+						"UPDATE ACCOUNT SET BALANCE = BALANCE - ? " +
+						"WHERE USERNAME = ?", new Object[] { price, username });
+			}
+		});
 	}
 
 }
