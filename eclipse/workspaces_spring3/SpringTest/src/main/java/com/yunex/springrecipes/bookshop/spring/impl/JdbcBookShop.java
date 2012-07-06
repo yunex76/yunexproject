@@ -23,6 +23,7 @@ public class JdbcBookShop implements BookShop {
 		Connection conn = null;
 		try {
 			conn = dataSource.getConnection();
+			conn.setAutoCommit(false);
 			
 			PreparedStatement stmt1 = conn.prepareStatement("SELECT PRICE FROM BOOK WHERE ISBN = ?");
 			stmt1.setString(1, isbn);
@@ -45,9 +46,19 @@ public class JdbcBookShop implements BookShop {
 			stmt3.setString(2, username);
 			stmt3.executeUpdate();
 			stmt3.close();
+			
+			conn.commit();
 		}
 		catch (SQLException e) {
 			System.out.println(e.getMessage());
+			if (conn != null) {
+				try {
+					conn.rollback();
+				}
+				catch (SQLException e1) {
+					System.out.println(e1.getMessage());
+				}
+			}
 			throw new RuntimeException();
 		}
 		finally {
