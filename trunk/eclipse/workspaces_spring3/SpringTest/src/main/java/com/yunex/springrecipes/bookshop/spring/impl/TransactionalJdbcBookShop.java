@@ -17,17 +17,15 @@ import com.yunex.springrecipes.bookshop.spring.BookShop;
 public class TransactionalJdbcBookShop extends JdbcDaoSupport implements
 		BookShop {
 	
-	private PlatformTransactionManager transactionManager;
+	private TransactionTemplate transactionTemplate;
 	
-	public void setTransactionManager(PlatformTransactionManager transactionManager) {
-		this.transactionManager = transactionManager;
+	public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
+		this.transactionTemplate = transactionTemplate;
 	}
 
 	@Override
 	public void purchase(final String isbn, final String username) {
 		
-		TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
-
 		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 			
 			@Override
