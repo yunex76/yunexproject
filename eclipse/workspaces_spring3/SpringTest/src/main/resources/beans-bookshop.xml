@@ -23,6 +23,11 @@
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 	
+	<bean id="cashier"
+		class="com.yunex.springrecipes.bookshop.spring.impl.BookShopCashier">
+		<property name="bookShop" ref="bookShop"></property>
+	</bean>
+	
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
