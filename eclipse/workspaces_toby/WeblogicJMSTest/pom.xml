@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.yunex</groupId>
+  <artifactId>WeblogicJMSTest</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+
+  <repositories>
+    <!-- 교보리얼코 사내 repository.
+        * 공개 메이븐저장소에서 얻을 수 없는 dependency 관리목적 저장소
+        1. sqljdbc4.jar 버전 2.0, 3.0 배포용
+        2. 웹로직(10.3.*) 배포관련 jar파일 배포용
+        3. Microsoft SQL Server JDBC driver 2.0
+        4. Microsoft SQL Server JDBC driver 3.0 
+    -->
+    <repository>
+      <id>kyoborealco-ci</id>
+      <url>http://ci.kyoborealco.co.kr:8080/nexus/content/repositories/thirdparty</url>
+    </repository>
+  </repositories>
+  
+  <dependencies>
+	<dependency>
+		<groupId>javax.jms</groupId>
+		<artifactId>jms-api</artifactId>
+		<version>1.1-rev-1</version>
+	</dependency>
+
+	<dependency>
+	  <groupId>com.oracle.weblogic</groupId>
+	  <artifactId>weblogic-maven-plugin</artifactId>
+	  <version>10.3.4</version>
+	</dependency>
+	<!--
+		weblogic jar 만들기 참고 : http://bumworld.dayindayout.co.kr/?p=2211
+		1. %WEBLOGIC_HOME%/wlserver_10.3/server/lib 이동
+		2. java -jar wljarbuilder.jar -profile weblogic-maven-plugin weblogic-maven-plugin.jar 생성
+		3. pom파일 추출(잘안된다 -_-) : jar xvf %WEBLOGIC_HOME%/wlserver_10.3/server/lib/weblogic-maven-plugin.jar META-INF/maven/com.oracle.weblogic/weblogic-maven-plugin/pom.xml
+		4. 넥서스 저장
+	 -->            
+  </dependencies>
+
+</project>
