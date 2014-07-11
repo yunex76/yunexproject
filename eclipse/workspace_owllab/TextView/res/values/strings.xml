@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">텍스트뷰</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="infomation">namzzangdev.tistory.com\nyunex76@gmail.com\n010-9393-9676\nOsan-si</string>
+
+</resources>
