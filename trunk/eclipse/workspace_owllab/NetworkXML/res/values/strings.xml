@@ -5,5 +5,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="reLoadButton_Text">세계의 국가 대표 요리들</string>
+    <string name="closeWindowButton_Text">창닫기</string>
 
 </resources>
