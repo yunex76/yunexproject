@@ -16,4 +16,12 @@
         <subject><![CDATA[케익 cake]]></subject>
         <content><![CDATA[우유 생크림을 주 재료로 만든 케익, 달콤한 맛이 난다.]]></content>
     </data>
+    <data>
+        <rowid>103</rowid>
+        <writer><![CDATA[삼봉]]></writer>
+        <thumb><![CDATA[http://152.149.199.23/owllab/images/103_s.jpg]]></thumb>
+        <img><![CDATA[http://152.149.199.23/owllab/images/103.jpg]]></img>
+        <subject><![CDATA[삼계탕]]></subject>
+        <content><![CDATA[건강식으로 좋다. 한국에서는 복날에 몸을 보양하기 위해서 많이 먹는다.]]></content>
+    </data>
 </lists>

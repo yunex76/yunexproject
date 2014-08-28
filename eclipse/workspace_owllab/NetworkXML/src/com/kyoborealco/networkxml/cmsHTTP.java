@@ -45,7 +45,9 @@ public class cmsHTTP {
 		ConnManagerParams.setTimeout(tmpparms, REGISTRATION_TIMEOUT);
 		
 		try {
+			System.out.println("resp = httpClient.execute(httpGet); 처리전");
 			resp = httpClient.execute(httpGet);
+			System.out.println("resp = httpClient.execute(httpGet); 처리후");
 			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 				if (Log.isLoggable(TAG, Log.VERBOSE)) {
 					Log.v(TAG, "Successful authentication");
@@ -65,11 +67,21 @@ public class cmsHTTP {
 			}
 		}
 		catch (final IOException e) {
+			System.out.println("catch (final IOException e) : " + e.toString());
 			if (Log.isLoggable(TAG, Log.VERBOSE)) {
 				Log.v(TAG, "IOException when getting authtoken", e);
 			}
 		}
+		catch (Exception e) {
+			// 오류가 자꾸 발생해서 Exception 이라고 모든 오류를 받는 catch 문을 추가함
+			// 그랬더니 LogCat에 다음과 같은 오류를 확인했다.
+			// 다행히 블로그들에 해당 오류 해결 방안이 나오는구나!!
+			// 08-28 00:55:08.515: I/System.out(798): catch (Exception e) : android.os.NetworkOnMainThreadException
+
+			System.out.println("catch (Exception e) : " + e.toString());
+		}
 		finally {
+			System.out.println("finally...");
 			if (Log.isLoggable(TAG, Log.VERBOSE)) {
 				Log.v(TAG, "completing");
 			}
