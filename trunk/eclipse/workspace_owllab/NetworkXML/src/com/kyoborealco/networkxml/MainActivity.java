@@ -22,6 +22,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,11 +44,24 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // loadList();
+        reLoadList(null);
     }
     
 	public void reLoadList(View view) {
+		
+		// android.os.NetworkOnMainThreadException 오류에 대한 처리코드 추가
+		// 참고1 : http://aroundck.tistory.com/1240
+		// 참고2 : http://rainmaker0303.tistory.com/entry/androidosNetworkOnMainThreadException-%EC%97%90%EB%9F%AC
+			// 내용 캡쳐]
+			// 해당 Exception 은 진저브레드 ( 2.3.3 )에서는 발생하지 않았고, ICS ( 4.0.0 )부터 발생을 하기 시작한다.
+			// 필자가 진저와 ICS 단말 둘다에서 테스트해본 결과 진저에서는 발생하지 않던 exception 이 ICS 에서 발생했기 때문이다.
+		if ( android.os.Build.VERSION.SDK_INT > 9 ) {
+			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+			StrictMode.setThreadPolicy(policy);
+		}
+		
     	loadList();
+		// loadList2();
     }
 
 
@@ -57,9 +71,15 @@ public class MainActivity extends Activity {
 		cmsHTTP cmsHttp = new cmsHTTP();
 		cmsHttp.encoding = "UTF-8";
 		cmsHttp.act = this;
+		
 		String tmpData = cmsHttp.sendGet(theUrl);
-		if (tmpData == null ) return;
+		if (tmpData == null ) {
+			return;
+		}
+		
 		hm = xml2HashMap(tmpData, "UTF-8");
+		System.out.println("hm.toString() = " + hm.toString());
+		
 		theListAdapter listAdapter = new theListAdapter(this, R.layout.list_row, hm);
 		ListView listView = (ListView)findViewById(R.id.listView1);
 		listView.setAdapter(listAdapter);
@@ -118,6 +138,7 @@ public class MainActivity extends Activity {
     
     
     class theListAdapter extends BaseAdapter {
+    	
     	LayoutInflater inflater;
     	HashMap<String, String> hm;
     	Context mContext;
@@ -126,6 +147,28 @@ public class MainActivity extends Activity {
     	
     	public theListAdapter(Context tContext, int listLayout,
     			HashMap<String, String> tmpHm) {
+        	
+    		/*
+    		넘어온 tmpHm
+    		{
+    			writer[0]=호정,
+    			rowid[0]=101,
+    			content[0]=하리사 양념, 야채, 특히 chick pea 를 주 재료로 만든 수프로, 얼큰한 맛이 난다.,
+    			subject[0]=하리사 수프 Harissa soup,
+    			thumb[0]=http://152.149.199.23/owllab/images/101_s.jpg,
+    			img[0]=http://152.149.199.23/owllab/images/101.jpg,
+    			
+    			writer[1]=정웅,
+    			rowid[1]=102,
+    			content[1]=우유 생크림을 주 재료로 만든 케익, 달콤한 맛이 난다.,
+    			subject[1]=케익 cake,
+    			thumb[1]=http://152.149.199.23/owllab/images/102_s.jpg,
+    			img[1]=http://152.149.199.23/owllab/images/102.jpg
+
+    			count=2,
+    		}
+    		*/
+    		
     		mContext = tContext;
     		mListLayout = listLayout;
     		hm = tmpHm;
@@ -177,7 +220,10 @@ public class MainActivity extends Activity {
 				}
 			}
 			catch ( IOException e ) {
-				
+				System.out.println("class theListAdapter : catch ( IOException e ) = " + e.toString());
+			}
+			catch ( Exception e ) {
+				System.out.println("class theListAdapter : catch ( Exception e ) = " + e.toString());
 			}
 			
 			((TextView) convertView.findViewById(R.id.textView1)).setText(
@@ -188,6 +234,7 @@ public class MainActivity extends Activity {
 					hm.get("writer[" + position + "]"));
 			
 			final int positionInt = position;
+			
 			((LinearLayout) convertView.findViewById(R.id.LinearLayout1)).setOnClickListener(
 					new Button.OnClickListener() {
 
@@ -211,7 +258,7 @@ public class MainActivity extends Activity {
 					hm.get("subject[" + position + "]"));
 			((TextView)dialog.findViewById(R.id.textView2)).setText(
 					hm.get("writer[" + position + "]"));
-			((TextView)dialog.findViewById(R.id.textView2)).setText(
+			((TextView)dialog.findViewById(R.id.textView3)).setText(
 					hm.get("content[" + position + "]"));
 			
 			Button buttonOK = (Button)dialog.findViewById(R.id.button1);
